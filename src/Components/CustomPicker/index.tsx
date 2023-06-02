@@ -66,8 +66,8 @@ const PickerModal = ({
               hidePicker();
             }}
             style={{paddingVertical: 10}}
-            hitSlop={{top: 10, bottom: 10, left: 20, right: 20}}
-            visible={pickerVisible}>
+            hitSlop={{top: 10, bottom: 10, left: 20, right: 20}}>
+            <Picker.Item label={i18n.t('Product Type')} value="" />
             {data.map(item => (
               <Picker.Item
                 key={item.value}

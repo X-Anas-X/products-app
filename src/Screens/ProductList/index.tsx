@@ -12,6 +12,7 @@ import Header from '../../Components/Header/Index';
 import ProductItem from '../../Components/ProductItem';
 import {Feather, FontAwesome5} from '@expo/vector-icons';
 import i18n from '../../Localization/i18n';
+// @ts-ignore
 import gif from '../../../assets/gif.gif';
 import {useAppDispatch, useAppSelector} from '../../Store';
 import {
@@ -38,6 +39,21 @@ const ProductList = (props: {
       <Text style={styles.emptyText}>{i18n.t('emptyList1')}</Text>
       <Text style={styles.emptyText}>{i18n.t('emptyList2')}</Text>
       <Text style={styles.emptyText}>{i18n.t('emptyList3')}</Text>
+    </View>
+  );
+
+  const HiddenComponent = (data: {item: Product}) => (
+    <View style={styles.hiddenItem}>
+      <TouchableOpacity
+        onPress={() => deleteAction(data.item._id ?? '')}
+        style={styles.hiddenDeleteIcon}>
+        <Feather name="trash-2" size={24} color="red" />
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => onPressEdit(data.item)}
+        style={styles.hiddenEditIcon}>
+        <AntDesign name="edit" size={24} color="#008000" />
+      </TouchableOpacity>
     </View>
   );
 
@@ -95,20 +111,8 @@ const ProductList = (props: {
       <SwipeListView
         data={products || []}
         renderItem={({item}) => <ProductItem item={item} />}
-        renderHiddenItem={data => (
-          <View style={styles.hiddenItem}>
-            <TouchableOpacity
-              onPress={() => deleteAction(data.item._id ?? '')}
-              style={styles.hiddenDeleteIcon}>
-              <Feather name="trash-2" size={24} color="red" />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => onPressEdit(data.item)}
-              style={styles.hiddenEditIcon}>
-              <AntDesign name="edit" size={24} color="#008000" />
-            </TouchableOpacity>
-          </View>
-        )}
+        renderHiddenItem={HiddenComponent}
+        ListEmptyComponent={EmptyList}
         ItemSeparatorComponent={() => <View style={{height: 10}} />}
         keyExtractor={(item, index) => index.toString()}
         leftOpenValue={75}

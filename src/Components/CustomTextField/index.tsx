@@ -17,8 +17,6 @@ const CustomTextField = ({
   type,
   errorMessage,
 }: Props) => {
-  console.log(errorMessage);
-
   return (
     <View>
       <TextInput
