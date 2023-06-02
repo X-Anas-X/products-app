@@ -22,15 +22,21 @@ import EmptyList from '../../Components/EmptyProductItem';
 import HiddenComponentItem from '../../Components/HiddenProductItem';
 // @ts-ignore
 import gif from '../../../assets/gif.gif';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from '../../NavigationStacks/RootNavigation';
 
-const ProductList = (props: {
-  navigation: {navigate: (arg0: string) => void};
-}) => {
+export type ListProductsSignUpScreenNavigationProp = StackNavigationProp<
+  RootStackParamList,
+  'ListProducts'
+>;
+
+interface Props {
+  navigation: ListProductsSignUpScreenNavigationProp;
+}
+
+const ProductList = ({navigation}: Props) => {
   const dispatch = useAppDispatch();
 
-  const navigateToProductForm = () => {
-    props.navigation.navigate('ProductForm');
-  };
   const {products} = useProducts();
   const [pressMe, setPressMe] = React.useState(false);
 
@@ -63,6 +69,10 @@ const ProductList = (props: {
     navigationRef.current?.navigate('EditProduct', {
       item: item,
     });
+  };
+
+  const navigateToProductForm = () => {
+    navigation.navigate('ProductForm');
   };
 
   return (

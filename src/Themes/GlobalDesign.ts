@@ -18,4 +18,9 @@ export const GlobalDesign = StyleSheet.create({
     fontWeight: 'bold',
     color: '#fff',
   },
+  logout: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: 'red',
+  },
 });
