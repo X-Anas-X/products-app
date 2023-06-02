@@ -1,0 +1,23 @@
+{
+  "Items": "Varor",
+  "Name": "Namn",
+  "Price": "Pris",
+  "Type": "Typ",
+  "emptyList1": "Du har inga produkter.",
+  "emptyList2": "Tryck på den gröna knappen nedan för att",
+  "emptyList3": "lägga till en ny.",
+  "Integrated": "Integrerad",
+  "Peripheral": "Perifer",
+  "Create New Product": "Skapa ny produkt",
+  "Edit Product": "Redigera produkt",
+  "SAVE": "SPARA",
+  "CANCEL": "AVBRYT",
+  "priceError": "Integrerade produkter får inte ha ett pris mellan 1000 och 2600 dollar",
+  "Product Type": "Produkttyp",
+  "Language": "Språk",
+  "Press Me": "Tryck på mig",
+  "warning": "Varning",
+  "formChanges": "Du har osparade ändringar. Är du säker på att du vill lämna den här skärmen?",
+  "deleteItem": "Är du säker på att du vill ta bort den här produkten?",
+  "Ok": "Ok"
+}
