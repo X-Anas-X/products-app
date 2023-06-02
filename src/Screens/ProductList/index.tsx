@@ -10,58 +10,37 @@ import {
 } from 'react-native';
 import Header from '../../Components/Header/Index';
 import ProductItem from '../../Components/ProductItem';
-import {Feather, FontAwesome5} from '@expo/vector-icons';
+import {FontAwesome5} from '@expo/vector-icons';
 import i18n from '../../Localization/i18n';
-// @ts-ignore
-import gif from '../../../assets/gif.gif';
-import {useAppDispatch, useAppSelector} from '../../Store';
-import {
-  deleteProductsAction,
-  getProductsAction,
-} from '../../Store/ConfigsReducer';
+import {useAppDispatch} from '../../Store';
+import {deleteProductsAction} from '../../Store/ConfigsReducer';
 import {SwipeListView} from 'react-native-swipe-list-view';
-import {AntDesign} from '@expo/vector-icons';
 import {navigationRef} from '../../Helpers/NavigationRef';
 import {Product} from '../../types';
+import useProducts from '../../Hooks/getProductsHook';
+import EmptyList from '../../Components/EmptyProductItem';
+import HiddenComponentItem from '../../Components/HiddenProductItem';
+// @ts-ignore
+import gif from '../../../assets/gif.gif';
 
 const ProductList = (props: {
   navigation: {navigate: (arg0: string) => void};
 }) => {
+  const dispatch = useAppDispatch();
+
   const navigateToProductForm = () => {
     props.navigation.navigate('ProductForm');
   };
-
+  const {products} = useProducts();
   const [pressMe, setPressMe] = React.useState(false);
-  const products = useAppSelector(state => state.ConfigsReducer.products);
-
-  const EmptyList = () => (
-    <View style={styles.emptyContainer}>
-      <Text style={styles.emptyText}>{i18n.t('emptyList1')}</Text>
-      <Text style={styles.emptyText}>{i18n.t('emptyList2')}</Text>
-      <Text style={styles.emptyText}>{i18n.t('emptyList3')}</Text>
-    </View>
-  );
 
   const HiddenComponent = (data: {item: Product}) => (
-    <View style={styles.hiddenItem}>
-      <TouchableOpacity
-        onPress={() => deleteAction(data.item._id ?? '')}
-        style={styles.hiddenDeleteIcon}>
-        <Feather name="trash-2" size={24} color="red" />
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => onPressEdit(data.item)}
-        style={styles.hiddenEditIcon}>
-        <AntDesign name="edit" size={24} color="#008000" />
-      </TouchableOpacity>
-    </View>
+    <HiddenComponentItem
+      item={data.item}
+      deleteAction={deleteAction}
+      onPressEdit={onPressEdit}
+    />
   );
-
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    dispatch(getProductsAction());
-  }, []);
 
   const deleteAction = (id: string) => {
     Alert.alert(
@@ -72,7 +51,7 @@ const ProductList = (props: {
         {
           text: i18n.t('Ok'),
           onPress: () => {
-            dispatch(deleteProductsAction(id));
+            dispatch(deleteProductsAction(id, true));
           },
         },
       ],
@@ -112,7 +91,7 @@ const ProductList = (props: {
         data={products || []}
         renderItem={({item}) => <ProductItem item={item} />}
         renderHiddenItem={HiddenComponent}
-        ListEmptyComponent={EmptyList}
+        ListEmptyComponent={() => <EmptyList />}
         ItemSeparatorComponent={() => <View style={{height: 10}} />}
         keyExtractor={(item, index) => index.toString()}
         leftOpenValue={75}
@@ -143,15 +122,6 @@ const styles = StyleSheet.create({
     borderBottomColor: '#000',
     borderBottomWidth: 1,
     paddingVertical: 15,
-  },
-  emptyContainer: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  emptyText: {
-    textAlign: 'center',
-    fontSize: 18,
-    color: '#979797',
   },
   itemsWrapper: {
     marginTop: 10,
@@ -187,17 +157,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
-  hiddenItem: {
-    flexDirection: 'row',
+  emptyContainer: {
+    flex: 1,
     alignItems: 'center',
-  },
-  hiddenDeleteIcon: {
-    marginLeft: 20,
-    marginTop: 10,
-  },
-  hiddenEditIcon: {
-    marginLeft: 10,
-    marginTop: 10,
   },
 });
 

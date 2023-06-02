@@ -1,7 +1,13 @@
 import React from 'react';
-import {TouchableOpacity, Text, TouchableOpacityProps} from 'react-native';
+import {
+  TouchableOpacity,
+  Text,
+  TouchableOpacityProps,
+  ActivityIndicator,
+} from 'react-native';
 import {Feather, Foundation} from '@expo/vector-icons';
 import i18n from '../../Localization/i18n';
+import {useAppSelector} from '../../Store';
 
 interface ButtonProps extends TouchableOpacityProps {
   disabled?: boolean;
@@ -21,6 +27,7 @@ const CustomButton: React.FC<ButtonProps> = ({
   titleColor,
   ...props
 }) => {
+  const loading = useAppSelector(state => state.ConfigsReducer.isLoading);
   return (
     <TouchableOpacity
       style={{
@@ -35,16 +42,24 @@ const CustomButton: React.FC<ButtonProps> = ({
         justifyContent: 'center',
         opacity: disabled ? 0.3 : 1,
       }}
-      disabled={disabled}
+      disabled={disabled || loading}
       {...props}>
-      <Text
-        style={{
-          color: titleColor ? 'black' : 'white',
-          marginRight: 5,
-          fontSize: 20,
-        }}>
-        {title}
-      </Text>
+      {loading ? (
+        <ActivityIndicator
+          size="small"
+          color={titleColor ? 'black' : 'white'}
+          style={{marginRight: 5}}
+        />
+      ) : (
+        <Text
+          style={{
+            color: titleColor ? 'black' : 'white',
+            marginRight: 5,
+            fontSize: 20,
+          }}>
+          {title}
+        </Text>
+      )}
       {icon ? (
         <Foundation name="prohibited" size={30} color="white" />
       ) : (
