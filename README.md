@@ -1,7 +1,5 @@
 # products-app
 
-This app is built using Expo.
-
 ## Getting Started with Products App
 This project was bootstrapped with [Create Expo App](https://docs.expo.dev/).
 
