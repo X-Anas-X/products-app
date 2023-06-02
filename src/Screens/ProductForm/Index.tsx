@@ -18,6 +18,22 @@ const ProductForm = () => {
     {label: i18n.t('Peripheral'), value: productTypeEnum.peripheral},
   ];
 
+  const validationSchema = Yup.lazy(value => {
+    return Yup.object().shape({
+      name: Yup.string().required(),
+      price: Yup.number()
+        .min(
+          value.type === productTypeEnum.integrated ? 1000 : 1,
+          i18n.t('priceError'),
+        )
+        .max(
+          value.type === productTypeEnum.integrated ? 2600 : Infinity,
+          i18n.t('priceError'),
+        ),
+      type: Yup.string().required(),
+    });
+  });
+
   const {errors, values, handleChange, handleSubmit, setFieldValue} = useFormik(
     {
       initialValues: {
@@ -25,13 +41,7 @@ const ProductForm = () => {
         price: '',
         type: '',
       },
-      validationSchema: Yup.object().shape({
-        name: Yup.string().required(),
-        price: Yup.number()
-          .min(1000, i18n.t('priceError'))
-          .max(2600, i18n.t('priceError')),
-        type: Yup.string().required(),
-      }),
+      validationSchema,
       onSubmit: values => {
         const product: Product = {
           name: values.name,
@@ -39,7 +49,7 @@ const ProductForm = () => {
           productType: values.type as productTypeEnum,
         };
 
-        dispatch(createProductsAction(product));
+        dispatch(createProductsAction(product, i18n.t));
       },
     },
   );

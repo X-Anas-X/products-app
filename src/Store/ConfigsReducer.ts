@@ -63,7 +63,7 @@ export const getProductsAction = (): AppThunk => async dispatch => {
 };
 
 export const createProductsAction =
-  (variables: Product): AppThunk =>
+  (variables: Product, t: (arg0: string) => string | undefined): AppThunk =>
   async dispatch => {
     dispatch(startLoading());
     try {
@@ -76,13 +76,22 @@ export const createProductsAction =
       navigationRef.current?.goBack();
       Alert.alert('Success', 'Product created');
     } catch (error) {
+      if ((error as Error).message.includes('444')) {
+        Alert.alert('Error', t('Product name is already taken'));
+      } else {
+        Alert.alert('Error', (error as Error).message);
+      }
     } finally {
       dispatch(finishLoading());
     }
   };
 
 export const editProductsAction =
-  (id: string, variables: EditProductType): AppThunk =>
+  (
+    id: string,
+    variables: EditProductType,
+    t: (arg0: string) => string | undefined,
+  ): AppThunk =>
   async dispatch => {
     dispatch(startLoading());
     try {
@@ -95,6 +104,11 @@ export const editProductsAction =
       navigationRef.current?.goBack();
       Alert.alert('Success', 'Product updated');
     } catch (error) {
+      if ((error as Error).message.includes('444')) {
+        Alert.alert('Error', t('Product name is already taken'));
+      } else {
+        Alert.alert('Error', (error as Error).message);
+      }
     } finally {
       dispatch(finishLoading());
     }
@@ -114,6 +128,7 @@ export const deleteProductsAction =
       if (noGoBack) return;
       navigationRef.current?.goBack();
     } catch (error) {
+      Alert.alert('Error', (error as Error).message);
     } finally {
       dispatch(finishLoading());
     }

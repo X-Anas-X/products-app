@@ -26,5 +26,6 @@
   "Login": "Logga in",
   "Logout": "Logga ut",
   "Email": "Email",
-  "Submit": "Skicka"
+  "Submit": "Skicka",
+  "Product name is already taken": "Produktnamnet är redan taget"
 }

@@ -27,5 +27,6 @@
   "Login": "Login",
   "Logout": "Logout",
   "Email": "Email",
-  "Submit": "Submit"
+  "Submit": "Submit",
+  "Product name is already taken": "Product name is already taken"
 }

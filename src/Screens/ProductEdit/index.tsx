@@ -38,6 +38,22 @@ const EditProduct = ({route}: Props) => {
     {label: i18n.t('Peripheral'), value: productTypeEnum.peripheral},
   ];
 
+  const validationSchema = Yup.lazy(value => {
+    return Yup.object().shape({
+      name: Yup.string().required(),
+      price: Yup.number()
+        .min(
+          value.type === productTypeEnum.integrated ? 1000 : 1,
+          i18n.t('priceError'),
+        )
+        .max(
+          value.type === productTypeEnum.integrated ? 2600 : Infinity,
+          i18n.t('priceError'),
+        ),
+      type: Yup.string().required(),
+    });
+  });
+
   const {errors, values, handleChange, handleSubmit, setFieldValue} = useFormik(
     {
       initialValues: {
@@ -45,13 +61,7 @@ const EditProduct = ({route}: Props) => {
         price: route.params.item.price,
         type: route.params.item.productType,
       },
-      validationSchema: Yup.object().shape({
-        name: Yup.string().required(),
-        price: Yup.number()
-          .min(1000, i18n.t('priceError'))
-          .max(2600, i18n.t('priceError')),
-        type: Yup.string().required(),
-      }),
+      validationSchema,
       onSubmit: values => {
         const product: EditProductType = {};
 
@@ -62,7 +72,9 @@ const EditProduct = ({route}: Props) => {
           product.productType = values.type as productTypeEnum;
 
         if (Object.keys(product).length > 0) {
-          dispatch(editProductsAction(route.params.item?._id ?? '', product));
+          dispatch(
+            editProductsAction(route.params.item?._id ?? '', product, i18n.t),
+          );
         }
       },
     },
