@@ -4,8 +4,10 @@ import {combineReducers} from 'redux';
 import {persistReducer, persistStore} from 'redux-persist';
 import storage from '@react-native-async-storage/async-storage';
 import ConfigsReducer from './ConfigsReducer';
+import AuthReducer from './AuthReducer';
 
 const rootReducer = combineReducers({
+  AuthReducer,
   ConfigsReducer,
 });
 

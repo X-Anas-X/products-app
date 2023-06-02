@@ -8,6 +8,7 @@ type Props = {
   type: 'default' | 'email-address' | 'numeric' | 'phone-pad';
   error?: boolean;
   errorMessage?: string;
+  secured?: boolean;
 };
 
 const CustomTextField = ({
@@ -16,12 +17,14 @@ const CustomTextField = ({
   value,
   type,
   errorMessage,
+  secured,
 }: Props) => {
   return (
     <View>
       <TextInput
         value={value}
         keyboardType={type}
+        secureTextEntry={secured}
         onChangeText={onChangeText}
         placeholder={placeholder}
         style={styles.input}

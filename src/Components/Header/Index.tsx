@@ -5,6 +5,8 @@ import ChangeLanguage from '../ChangeLanguage';
 import i18n from '../../Localization/i18n';
 import {UpdateLanguage} from '../../Store/ConfigsReducer';
 import {useAppDispatch, useAppSelector} from '../../Store';
+import {navigationRef} from '../../Helpers/NavigationRef';
+import {setLogout} from '../../Store/AuthReducer';
 
 type Props = {
   title: string;
@@ -25,6 +27,15 @@ const options =
 export default function Header({title}: Props) {
   const dispatch = useAppDispatch();
   const lng = useAppSelector(state => state.ConfigsReducer.language);
+
+  const logout = () => {
+    dispatch(setLogout());
+    navigationRef?.current?.reset({
+      index: 0,
+      routes: [{name: 'Login'}],
+    });
+  };
+
   return (
     <View>
       {Platform.OS === 'ios' ? (
@@ -49,6 +60,9 @@ export default function Header({title}: Props) {
           placeholder={`${i18n.t('Language')}: ${lng || 'en'}`}
           selectedValue={undefined}
         />
+        <Text style={GlobalDesign.logout} onPress={logout}>
+          {i18n.t('Logout')}
+        </Text>
       </View>
     </View>
   );

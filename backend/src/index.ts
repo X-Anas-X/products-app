@@ -1,6 +1,7 @@
 import {connectDB} from './db';
 import express from 'express';
 import {Product} from './Products/schema';
+import {User, UserDocument} from './User/Schema';
 
 const app = express();
 app.use(express.json());
@@ -62,6 +63,36 @@ app.delete('/products/:id', async (req, res) => {
         res.send(product);
     } catch (err) {
         res.status(500).send(err);
+    }
+});
+
+// Signup endpoint
+app.post('/signup', async (req, res) => {
+    try {
+        const {username, email, password} = req.body;
+        const user: UserDocument = new User({username, email, password});
+        await user.save();
+        res.status(201).send(user);
+    } catch (err) {
+        res.status(400).send(err);
+    }
+});
+
+// Signin endpoint
+app.post('/signin', async (req, res) => {
+    try {
+        const {email, password} = req.body;
+        const user: UserDocument | null = await User.findOne({email});
+        if (!user) {
+            return res.status(401).send('Invalid email or password');
+        }
+        const isMatch: boolean = await user.comparePassword(password);
+        if (!isMatch) {
+            return res.status(401).send('Invalid email or password');
+        }
+        res.send(user);
+    } catch (err) {
+        res.status(400).send(err);
     }
 });
 
