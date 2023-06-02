@@ -67,8 +67,7 @@ const ChangeLanguage = ({
               hidePicker();
             }}
             dropdownIconColor={'#FFFF'}
-            placeholder={placeholder}
-            visible={pickerVisible}>
+            placeholder={placeholder}>
             {data.map(item => (
               <Picker.Item
                 key={item.value}
