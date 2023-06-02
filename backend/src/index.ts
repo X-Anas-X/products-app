@@ -3,6 +3,14 @@ import express from 'express';
 import {Product} from './Products/schema';
 import {User, UserDocument} from './User/Schema';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface MongoError extends Error {
+    code: number;
+    keyValue?: {
+        [key: string]: string;
+    };
+}
+
 const app = express();
 app.use(express.json());
 
@@ -13,7 +21,12 @@ app.post('/products', async (req, res) => {
         await product.save();
         res.status(201).send(product);
     } catch (err) {
-        res.status(400).send(err);
+        const mongoError = err as MongoError;
+        if (mongoError.code === 11000 && mongoError.keyValue.name) {
+            res.status(444).send('Product name is already taken');
+        } else {
+            res.status(400).send(err);
+        }
     }
 });
 
@@ -49,7 +62,12 @@ app.patch('/products/:id', async (req, res) => {
         }
         res.send(product);
     } catch (err) {
-        res.status(400).send(err);
+        const mongoError = err as MongoError;
+        if (mongoError.code === 11000 && mongoError.keyValue.name) {
+            res.status(444).send('Product name is already taken');
+        } else {
+            res.status(400).send(err);
+        }
     }
 });
 
