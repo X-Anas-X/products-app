@@ -49,18 +49,23 @@ export const UpdateLanguage = (lng: string): AppThunk => {
 };
 
 export const getProductsAction = (): AppThunk => async dispatch => {
+  dispatch(startLoading());
   try {
     const {data} = await apiRequest<[Product]>({
       url: 'products',
       method: 'GET',
     });
     dispatch(setProducts(data));
-  } catch (error) {}
+  } catch (error) {
+  } finally {
+    dispatch(finishLoading());
+  }
 };
 
 export const createProductsAction =
   (variables: Product): AppThunk =>
   async dispatch => {
+    dispatch(startLoading());
     try {
       await apiRequest<boolean>({
         url: 'products',
@@ -70,12 +75,16 @@ export const createProductsAction =
       dispatch(getProductsAction());
       navigationRef.current?.goBack();
       Alert.alert('Success', 'Product created');
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      dispatch(finishLoading());
+    }
   };
 
 export const editProductsAction =
   (id: string, variables: EditProductType): AppThunk =>
   async dispatch => {
+    dispatch(startLoading());
     try {
       await apiRequest<boolean>({
         url: 'products/' + id,
@@ -85,19 +94,27 @@ export const editProductsAction =
       dispatch(getProductsAction());
       navigationRef.current?.goBack();
       Alert.alert('Success', 'Product updated');
-    } catch (error) {}
+    } catch (error) {
+    } finally {
+      dispatch(finishLoading());
+    }
   };
 
 export const deleteProductsAction =
-  (id: string): AppThunk =>
+  (id: string, noGoBack?: boolean): AppThunk =>
   async dispatch => {
+    dispatch(startLoading());
     try {
       await apiRequest<boolean>({
         url: 'products/' + id,
         method: 'DELETE',
       });
       dispatch(getProductsAction());
-      navigationRef.current?.goBack();
       Alert.alert('Success', 'Product deleted');
-    } catch (error) {}
+      if (noGoBack) return;
+      navigationRef.current?.goBack();
+    } catch (error) {
+    } finally {
+      dispatch(finishLoading());
+    }
   };
