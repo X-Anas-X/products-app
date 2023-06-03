@@ -14,6 +14,12 @@ Make sure you have installed all the following prerequisites on your machine:
 
 - Yarn - install Yarn (sudo npm install -g yarn).
 
+- MongoDB: 
+make sure you follow the commands exactly as mentioned in the links:
+* [ubuntu/linux](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-ubuntu/)
+* [macOS](https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-os-x-tarball/)
+
+
 ## Running the App
 
 **Note: All commands below assume that you are using Yarn. For example, to run the backend, use `yarn dev`.**
