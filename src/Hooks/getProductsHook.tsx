@@ -10,7 +10,9 @@ const useProducts = () => {
     dispatch(getProductsAction());
   }, []);
 
-  return {products};
+  return {
+    products,
+  };
 };
 
 export default useProducts;
