@@ -84,6 +84,16 @@ app.delete('/products/:id', async (req, res) => {
     }
 });
 
+// Get favorites
+app.get('/favorites', async (req, res) => {
+    try {
+        const products = await Product.find({isFavorite: true});
+        res.send(products);
+    } catch (err) {
+        res.status(500).send(err);
+    }
+});
+
 // Add to favorites
 app.post('/products/:id/favorite', async (req, res) => {
     try {
@@ -95,16 +105,6 @@ app.post('/products/:id/favorite', async (req, res) => {
         product.comment = req.body.comment;
         await product.save();
         res.send(product);
-    } catch (err) {
-        res.status(500).send(err);
-    }
-});
-
-// Get favorites
-app.get('/products/favorites', async (req, res) => {
-    try {
-        const products = await Product.find({favorites: req.body.userId});
-        res.send(products);
     } catch (err) {
         res.status(500).send(err);
     }
